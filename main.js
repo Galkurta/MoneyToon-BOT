@@ -396,7 +396,7 @@ class PrompTaleAutomation {
 
   async playGames() {
     const friendsCount = await this.checkFriendsCount();
-    logger.custom(
+    logger.info(
       `Game Status (Friends: ${colors.success}${friendsCount}${colors.reset})`
     );
 
@@ -426,7 +426,7 @@ class PrompTaleAutomation {
         );
 
         const gameData = status.data.data;
-        logger.custom(
+        logger.info(
           `${colors.brightCyan}${game} Game Available Plays:${colors.reset}`
         );
 
@@ -512,7 +512,7 @@ class PrompTaleAutomation {
         );
       }
     }
-    logger.custom("Finished playing all available games");
+    logger.info("Finished playing all available games");
   }
 }
 
@@ -536,7 +536,7 @@ async function runAllAccounts() {
   );
 
   for (const token of tokens) {
-    logger.custom(
+    logger.info(
       `Processing account with token: ${colors.info}${token.substring(
         0,
         20
