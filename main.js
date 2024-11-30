@@ -482,7 +482,7 @@ class PrompTaleAutomation {
                 );
 
                 logger.success(
-                  `✓ ${colors.custom}${game} ${level}${colors.reset} play ${
+                  `${colors.custom}${game} ${level}${colors.reset} play ${
                     colors.info
                   }${i + 1}/${remainingTimes}${colors.reset}: ${
                     colors.success
