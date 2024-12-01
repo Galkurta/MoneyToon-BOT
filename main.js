@@ -224,13 +224,6 @@ class PrompTaleAutomation {
         })
       );
 
-      if (completedCount?.data?.data >= CONFIG.TOTAL_TASKS) {
-        logger.info(
-          `${colors.success}All daily tasks already completed${colors.reset}`
-        );
-        return;
-      }
-
       const tasksResponse = await retryRequest(() =>
         axios.get(`${this.baseUrl}${CONFIG.ENDPOINTS.TASKS_LIST}`, {
           headers: this.headers,
@@ -242,21 +235,26 @@ class PrompTaleAutomation {
         return;
       }
 
-      const remainingTasks =
-        CONFIG.TOTAL_TASKS - (completedCount?.data?.data || 0);
+      // Show task status
       logger.info(
-        `${colors.info}${remainingTasks}${colors.reset} tasks remaining to complete`
+        `${colors.brightCyan}Task Status (${completedCount.data.data}/${CONFIG.TOTAL_TASKS})${colors.reset}`
       );
 
+      // Process all tasks regardless of completedCount
       for (const task of tasksResponse.data.data) {
-        try {
-          if (task.completeCount > 0) {
-            logger.info(
-              `Task ${colors.custom}${task.taskMainTitle}${colors.reset} - ${colors.warning}Already completed${colors.reset}`
-            );
-            continue;
-          }
+        if (task.completeCount > 0) {
+          logger.info(
+            `Task ${colors.custom}${task.taskMainTitle}${colors.reset} - ${colors.warning}Already completed${colors.reset}`
+          );
+          continue;
+        }
 
+        // Process uncompleted task
+        logger.info(
+          `Processing task: ${colors.custom}${task.taskMainTitle}${colors.reset}`
+        );
+
+        try {
           await retryRequest(() =>
             axios.post(
               `${this.baseUrl}${CONFIG.ENDPOINTS.TASK_RUN}`,
@@ -322,7 +320,7 @@ class PrompTaleAutomation {
       }
 
       logger.info(
-        `${colors.brightCyan}=== Checking Free SL Pass Rewards ===${colors.reset}`
+        `${colors.brightCyan}Checking Free SL Pass Rewards${colors.reset}`
       );
 
       let hasUnclaimedRewards = false;
